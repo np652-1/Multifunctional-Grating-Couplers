@@ -1,15 +1,15 @@
 %%
 clear;
-% basic parameters
 addpath(genpath('export_fig/'))
 addpath(genpath('multi_frequency_multi_angle_solver_v3/'))
-mkdir('Fig4_f_plots/')
-wl=linspace(0.536,0.609,2);
+mkdir('Fig4_e_plots/')
+% basic parameters
+wl=linspace(0.5,0.609,4);
 wl_max = max(wl);
-h=1/64;
+h=1/32;
 n_core=2.0;
-wgt=64*h;
-gcl=floor(10.7/h)*h;
+wgt=20*h;
+gcl=17;
 par_flag = 0;
 k=2*pi./wl;
 
@@ -29,7 +29,6 @@ wgl = gcl+2*absl+padding+2*wl_max; % waveguide length, include absorbers on two 
 wg_center = [ax/2,ay/2];
 wg_size = [wgl,wgt];
 [wg_x1,wg_x2,wg_y1,wg_y2,wg_region_index] = add_region(h,wg_center,wg_size,xSim,ySim);
-%fprintf('\nWaveguide thickness: %g\n', wg_y2-wg_y1);
 
 % set material and initialize chi
 density = zeros(size(xSim)); % We don't need to add smoothed backgrounds for this, the error is very small
@@ -52,7 +51,9 @@ gc_size = [gcl,etch];
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 numlayers=4;
 numreps=ny_gc/numlayers;
-x_opt = readmatrix('tradeoff_curve_data/b_gc_density_opt_betaInf.txt');
+x_opt = readmatrix('tradeoff_curve_data/4wl_gc_density_opt.txt');
+%%% wl  =      500      536      573      609  
+%%% optimal CE=0.919195 0.913772 0.910781 0.935491
 xoptre=reshape(x_opt,ny_gc/numreps,nx_gc);
 
 xoptreactual=zeros(ny_gc,nx_gc);
@@ -63,6 +64,7 @@ ind=ind+numreps;
 end
 xoptactual=xoptreactual(:);
 
+%fig=figure('units','normalized','position',[0,0,1,1]);
 fig=figure('units','normalized','position',[0,0,1,1],'visible','off');
 imagesc(1-xoptreactual)
 colormap('gray')
@@ -70,7 +72,7 @@ daspect([1,1,1])
 set(gca,'ydir','normal')
 xticks([])
 yticks([])
-export_fig('Fig4_f_plots/optimal_design_density.png','-transparent',fig)
+export_fig('Fig4_e_plots/xopt.png','-transparent',fig)
 
 gc_density = reshape(xoptreactual,ny_gc,nx_gc);
 chi(gc_region_index) = chi_max*xoptactual;
@@ -79,30 +81,30 @@ x_gc=reshape(xSim(gc_region_index),ny_gc,nx_gc);
 y_gc=reshape(ySim(gc_region_index),ny_gc,nx_gc);
 
 %%
-z0 = 0;
-marker_pitch=[1.6,2.2];
-w0=3.0;
-theta = -asin(2*pi./reshape(marker_pitch,1,[])./k(:));
-beam_center = [gc_center(1),wg_y2];
+% incident fields, here I use a Gaussian beam 
+z0 = 0; % distance between focus and the reference point, which I set to be he center of the top surface of the design region
+marker_pitch=2.3;
+w0=5.0;
+theta = -asin(2*pi./reshape(marker_pitch,1,[])./k(:)); % first order diffraction by the marker, pitch is a row vector,k(:) is a column vector, the angle should be negative when the monitor is on the left
+beam_center = [gc_center(1),wg_y2]; % illuminates on the center of the gc
 [Ez_inc_fx,Hy_inc_fx,Einc,P_inc] = GaussianBeam2D_EzHy(k,theta,w0,z0,xySim,xSim,ySim,x,h,beam_center);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%          Plot Fields
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-colorwls=[450,470;620,650];
-folder='Fig4_f_plots';
-for kind=1:2
-    for thetaind=1:2
+colorwls=[450,500,600,650];
+folder='Fig4_e_plots';
+for kind=1:4
 [afun, Chi, precon, Cpp] = build_solver(k(kind), chi, ax, ay, nx, ny, Npv, Nph, NODES{kind}, param{kind}, quad_order); % all angles at this freq share the outputs. NODES{1} is the NODES at k (single freq)
-P = solve_P_E(k(kind), afun, Chi, precon, Cpp, Einc(:,:,kind,thetaind), tol, maxit); % forward simulation
+P = solve_P_E(k(kind), afun, Chi, precon, Cpp, Einc(:,:,kind), tol, maxit); % forward simulation
 
 LvP = ay+10*wl_max;
 LhP = ax+5*wl_max;
 hP = h; % hP can be different from h
 ctrPt = [ax/2, ay/2+2];
-Einc_fxP = @(x, y) Ez_inc_fx([x,y],k(kind),theta(kind,thetaind));
+Einc_fxP = @(x, y) Ez_inc_fx([x,y],k(kind),theta(kind));
 [EincP, EscatP, EP, xP, yP, title_string] = plotELarge(LvP, LhP, hP, k(kind), ctrPt, quad_order, xSim, ySim, P, Einc_fxP, ...
-    ['\lambda=', num2str(wl(kind),'%.3f'),' um', ' \theta=', num2str(rad2deg(theta(kind,thetaind)),'%.1f'),' deg'],'off');
+    ['\lambda=', num2str(wl(kind),'%.3f'),' um', ' \theta=', num2str(rad2deg(theta(kind)),'%.1f'),' deg'],'off');
 
 fig=figure('units','normalized','position',[0,0,1,1],'visible','off');
 ax1=axes;%subplot('Position',[0,0,1,1]);
@@ -116,16 +118,15 @@ axis off
 box off
 xticks([])
 yticks([])
-xlims=[min(xP(1,:))+5*max(wl),max(xP(1,:))-6*max(wl)];
+xlims=[min(xP(1,:))+7*max(wl),max(xP(1,:))-8*max(wl)];
 xlim(xlims)
-ylims=[min(yP(:,1))+1.5*max(wl),max(yP(:,1))-5*max(wl)];
+ylims=[min(yP(:,1))+1*max(wl),max(yP(:,1))-2*max(wl)];
 ylim(ylims)
 
 % Plot the fields on the second, overlaid axis
 ax2 = axes;
 imagesc(ax2,xP(1,:), yP(:,1), abs(EP).^2); % overlay fields on structure, here I plot the intensity
-colormap(ax2, singleColorIntensityColormap(colorwls(kind,thetaind)));
-%colorbar(ax2,'Location','eastoutside')
+colormap(ax2, singleColorIntensityColormap(colorwls(kind)));
 
 % Adjust transparency of the second image
 set(ax2.Children, 'AlphaData',0.85); % 70% transparency for second image
@@ -141,6 +142,5 @@ ax2.UserData = linkprop([ax1,ax2],... % link the two axes
     'ydir','xdir','xlim','ylim'}); % add more props as needed
 set(gca,'FontSize',22)
 
-export_fig([folder,'/wl',num2str(kind),'_k',num2str(thetaind),'.png'],fig);
-    end
+export_fig([folder,'/wl',num2str(kind),'.png'],fig);
 end
