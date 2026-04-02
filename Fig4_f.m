@@ -1,9 +1,12 @@
 %%
 clear;
-% basic parameters
 addpath(genpath('export_fig/'))
 addpath(genpath('multi_frequency_multi_angle_solver_v3/'))
 mkdir('Fig4_f_plots/')
+
+disp('Solving and plotting started. Please wait ~30 seconds for plots to start generating.')
+
+% basic parameters
 wl=linspace(0.536,0.609,2);
 wl_max = max(wl);
 h=1/64;
