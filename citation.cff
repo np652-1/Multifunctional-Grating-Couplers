@@ -1,14 +1,15 @@
 cff-version: 1.2.0
 message: "If you use this software, please cite it as below."
 authors:
-- family-names: "YOUR_NAME_HERE"
-  given-names: "YOUR_NAME_HERE"
-  orcid: "https://orcid.org/0000-0000-0000-0000"
-- family-names: "Lisa"
-  given-names: "Mona"
-  orcid: "https://orcid.org/0000-0000-0000-0000"
-title: "Multifunctional-Grating-Couplers"
+- family-names: "Pyvovar"
+  given-names: "Nazar"
+- family-names: "Li"
+  given-names: "Hao"
+- family-names: "Dai"
+  given-names: "Zhaowei"
+- family-names: "Miller"
+  given-names: "Owen"
+title: "Many-mode grating couplers by avoiding undesired couplings: software supplemental materials"
 version: 1.0.0
-doi: 10.5281/zenodo.1234
-date-released: 2026-04-06
-url: "https://github.com/np652-1/Multifunctional-Grating-Couplers"
+doi: 10.5281/zenodo.19447348
+url: "https://github.com/np652-1/Multifunctional-Grating-Couplers.git"
