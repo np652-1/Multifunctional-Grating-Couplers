@@ -13,3 +13,14 @@ title: "Many-mode grating couplers by avoiding undesired couplings: software sup
 version: 1.0.0
 doi: 10.5281/zenodo.19447348
 url: "https://github.com/np652-1/Multifunctional-Grating-Couplers.git"
+preferred-citation:
+  type: article
+  authors:
+  - family-names: "Pyvovar"
+  given-names: "Nazar"
+  - family-names: "Li"
+    given-names: "Hao"
+  - family-names: "Dai"
+    given-names: "Zhaowei"
+  - family-names: "Miller"
+    given-names: "Owen"
