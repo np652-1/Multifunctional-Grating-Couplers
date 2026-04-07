@@ -11,7 +11,7 @@ authors:
   given-names: "Owen"
 title: "Many-mode grating couplers by avoiding undesired couplings: software supplemental materials"
 version: 1.0.0
-doi: 10.5281/zenodo.1234
+doi: 10.5281/zenodo.19447348
 url: "https://github.com/np652-1/Multifunctional-Grating-Couplers.git"
 preferred-citation:
   type: article
@@ -25,7 +25,7 @@ preferred-citation:
   - family-names: "Miller"
     given-names: "Owen"
   doi: "10.0000/00000"
-  journal: "Journal Title"
+  journal: "Optica"
   month: 9
   start: 1 # First page number
   end: 10 # Last page number
