@@ -24,3 +24,12 @@ preferred-citation:
     given-names: "Zhaowei"
   - family-names: "Miller"
     given-names: "Owen"
+  doi: "10.5281/zenodo.19447348"
+  journal: "Optica"
+  month: 9
+  start: 1 # First page number
+  end: 10 # Last page number
+  title: "Many-mode grating couplers by avoiding undesired couplings"
+  issue: 1
+  volume: 1
+  year: 2026
