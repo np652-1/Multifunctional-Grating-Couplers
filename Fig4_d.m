@@ -86,7 +86,7 @@ x_gc=reshape(xSim(gc_region_index),ny_gc,nx_gc);
 y_gc=reshape(ySim(gc_region_index),ny_gc,nx_gc);
 
 %%
-% incident fields, here I use a Gaussian beam 
+% incident fields, here I use a Gaussian beam
 z0 = 0; % distance between focus and the reference point, which I set to be he center of the top surface of the design region
 marker_pitch=2.3;
 w0=3.2;
