@@ -10,6 +10,7 @@ authors:
 - family-names: "Miller"
   given-names: "Owen"
 title: "Many-mode grating couplers by avoiding undesired couplings: software supplemental materials"
-version: 1.0.0
-doi: 10.5281/zenodo.19447348
+version: 1.1.1
+doi: 10.5281/zenodo.19447347
 url: "https://github.com/np652-1/Multifunctional-Grating-Couplers.git"
+date-released: 2026-09-07
